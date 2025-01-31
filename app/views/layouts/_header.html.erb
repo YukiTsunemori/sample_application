@@ -1,0 +1,14 @@
+<header class="navbar navbar-fixed-top navbar-inverse">
+      <%# 全てのnavbarにはBootstrapフレームワークによって特別な意味が与えられる %>
+      <div class="container">
+        <%= link_to "sample app", '#', id: "logo" %>
+        <nav>
+          <ul class="nav navbar-nav navbar-right">
+            <%# 第一引数に表示されるテキスト、第二引数にalt属性、第三引数にオプションハッシュ=>ここではcssのidを指定 %>
+            <li><%= link_to "Home",   '#' %></li>
+            <li><%= link_to "Help",   '#' %></li>
+            <li><%= link_to "Log in", '#' %></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
