@@ -3,7 +3,7 @@ class StaticPagesController < ApplicationController
     # render ...
     # アクション直下にレンダリングさせるファイルを指定できる
     # renderなどの指示がない場合、app/views/static_pages/home.html.erbが返される=>デフォルト
-    @time = Time.current.in_time_zone('Asia/Tokyo')
+    
   end
 
   def help
@@ -13,7 +13,9 @@ class StaticPagesController < ApplicationController
     @hello = "This is about page mother fucker"
   end
 
-
+  def contact
+    
+  end
 end
 
 
