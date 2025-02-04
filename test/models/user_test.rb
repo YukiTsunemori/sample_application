@@ -3,48 +3,53 @@ require "test_helper"
 class UserTest < ActiveSupport::TestCase
   def setup
     @user = User.new(name: "Example User", email: "user@example.com",
-                      password: "foobar", password_confirmation: "foobar")
+    password: "foobar", password_confirmation: "foobar")
   end
-
+# ーーーーーーーー@userが有効であるべきーーーーーーー
   test "should be valid" do
     assert @user.valid? 
   end
-
+# ーーーーーーー@user.nameが空白であるべきではない検証ーーーーーーー
   test "name should be present" do
     @user.name = "      "
     assert_not @user.valid?
   end
-
+# ーーーーーーー@user.emailが空白であるべきではない検証ーーーーーーー
   test "email should be present" do
     @user.email = "     "
     assert_not @user.valid?
   end
-
+# ーーーーーーー@user.nameが51文字であるべきではない検証ーーーーーーー
+# user.rbのvalidatesメソッドでMAX50文字で定義しているから、assert_notでfalseが返るべき。
   test "name should not be too long" do
     @user.name = "a" * 51
     assert_not @user.valid?
   end
-
+# ーーーーーーー@user.emailが244文字以上であるべきではない検証ーーーーーーー
+# user.rbのvalidatesメソッドでMAX255文字文字で定義しているから、assert_notでfalseが返るべき。
   test "email should not be too long" do
-    @user.email = "a" * 244 + "@example.com"
+    @user.email = "a" * 244 + "@example.com" #　=> 256文字になる => assert_notでfalseが返るべき
     assert_not @user.valid?
   end
-
+# ーーーーーーーemailが有効なアドレスであるべきかーーーーーーー
+# 有効なフォーマットであるいくつかのアドレスを用意し変数へ代入
   test "email validation should accept valid addresses" do
     valid_addresses = %w[user@example.com USER@foo.COM A_US-ER@foo.bar.org
-                         first.last@foo.jp alice+bob@baz.cn]
+                         first.last@foo.jp alice+bob@baz.cn yuki.tsunemori@example.com]
     valid_addresses.each do |valid_address|
       @user.email = valid_address
       assert @user.valid?, "#{valid_address.inspect} should be valid"
     end
   end
 
+# 無効なメールアドレスであればfalseが返る検証。
+# 無効なフォーマットであるいくつかのアドレスを用意し変数へ代入
   test "email validation should reject invalid addresses" do
     invalid_addresses = %w[user@example,com user_at_foo.org user.name@example.
                            foo@bar_baz.com foo@bar+baz.com]
     invalid_addresses.each do |invalid_address|
       @user.email = invalid_address
-      assert_not @user.valid?, "#{invalid_address.inspect} should be invalid"
+      assert_not @user.valid?, "#{invalid_address.inspect} このアドレスは有効ではございません"
     end
   end
 
@@ -63,4 +68,5 @@ class UserTest < ActiveSupport::TestCase
     @user.password = @user.password_confirmation = "a" * 5
     assert_not @user.valid?
   end
+
 end
