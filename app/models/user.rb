@@ -10,8 +10,10 @@ class User < ApplicationRecord
   validates :password, presence: true, length: {minimum: 6}
 
   def User.digest(string)
+    # users.ymlで呼び出されたこのメソッドは渡された引数をハッシュ化してくれるメソッド
     cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST :
                                                   BCrypt::Engine.cost
     BCrypt::Password.create(string, cost: cost)
+    # 三項演算子 if else endを１行で書いている
   end
 end

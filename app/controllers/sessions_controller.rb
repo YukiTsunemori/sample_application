@@ -24,8 +24,8 @@ class SessionsController < ApplicationController
   # {session{ "password"=> "foobar"}}のようにネスト構造になっている。
   # そのため、取り出す際はparams[:session][:email]でパラメータから取得できる。
 
-  def destroy
-    log_out
+  def destroy 
+    log_out # helperで定義したログアウトメソッドの呼び出し
     redirect_to root_url, status: :see_other
   end
 end
