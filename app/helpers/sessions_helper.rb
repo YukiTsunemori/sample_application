@@ -7,12 +7,10 @@ module SessionsHelper
 
   # 現在ログイン中のユーザを返す（いる場合）
   def current_user
-    if session[:user_id] # session情報はTRUEであれば
+    if session[:user_id] # session情報はTRUEであれば　=>この構文はメモ化
         @current_user ||= User.find_by(id: session[:user_id]) # @current_userへ情報を代入する
     end
-    # なぜ、ログイン情報をif文で分岐しチェックしているのか。
-    # →毎回find_byメソッドを読み込みするとデーターベースへの読み込み回数が増え負荷がかかる。
-    # if文でtrueを返すことで読み込み回数を少なくする。
+    # DBへの問い合わせをなるべく少なく実行したい。
   end
 
   # ユーザがログインしていればTrue、その他ならfalseを返す
