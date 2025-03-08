@@ -24,6 +24,13 @@ class UsersController < ApplicationController
     end
   end
 
+    def destory
+      # sessions_helperで定義している、log_outメソッドを呼び出す
+      log_out
+      redirect_to root_url, status: :see_other
+
+    end
+
   private
     def user_params
       params.require(:user).permit(:name, :email, :password,

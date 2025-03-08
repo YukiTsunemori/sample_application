@@ -4,6 +4,7 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
 
   def setup
     @user = users(:michael)
+    # usersはusers.ymlを指し、引数の:michaelはymlで定義したラベルを指す。
   end
 
   test "login with valid email/invalid password" do

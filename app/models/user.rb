@@ -10,6 +10,8 @@ class User < ApplicationRecord
   validates :password, presence: true, length: {minimum: 6}
 
   def User.digest(string)
+    # fixtures/users.ymlでUser.digestメソッドを呼び出せるよう、ここで定義
+    # 引数に渡された文字列をハッシュ化するメソッド。
     cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST :
                                                   BCrypt::Engine.cost
     BCrypt::Password.create(string, cost: cost)
