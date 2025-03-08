@@ -3,6 +3,7 @@ class SessionsController < ApplicationController
   end
 
   def create
+    # remember_meの値が１であればtrue, 0であればfalse
     user = User.find_by(email: params[:session][:email].downcase)
     if user && user.authenticate(params[:session][:password])
       # (nilガード）
@@ -10,6 +11,8 @@ class SessionsController < ApplicationController
       # user.authenticateはnilを受け取らないので、エラーになる。そのため、アンパサンド*2で
       # true && trueの式を代わりに書いてあげる。
       reset_session
+      params[:session][:remember_me] == '1' ? remember(user) : forget(user)
+      remember user
       log_in user
       redirect_to user_url(user)
       # ユーザが存在し且つパスが一致した場合=> Trueが帰った時
@@ -25,7 +28,7 @@ class SessionsController < ApplicationController
   # そのため、取り出す際はparams[:session][:email]でパラメータから取得できる。
 
   def destroy 
-    log_out # helperで定義したログアウトメソッドの呼び出し
+    log_out if logged_in? # helperで定義したログアウトメソッドの呼び出し
     redirect_to root_url, status: :see_other
   end
 end
