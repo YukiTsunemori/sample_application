@@ -1,22 +1,17 @@
+# frozen_string_literal: true
+
 class StaticPagesController < ApplicationController
   def home
     # render ...
     # アクション直下にレンダリングさせるファイルを指定できる
     # renderなどの指示がない場合、app/views/static_pages/home.html.erbが返される=>デフォルト
-    
   end
 
-  def help
-  end
+  def help; end
 
   def about
-    @hello = "This is about page mother fucker"
+    @hello = 'This is about page mother fucker'
   end
 
-  def contact
-    
-  end
+  def contact; end
 end
-
-
-
