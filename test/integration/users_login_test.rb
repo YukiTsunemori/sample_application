@@ -4,7 +4,6 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
 
   def setup
     @user = users(:michael)
-    # usersはusers.ymlを指し、引数の:michaelはymlで定義したラベルを指す。
   end
 
   test "login with valid email/invalid password" do
@@ -24,8 +23,8 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     post login_path, params: { session: { email:    @user.email,
                                           password: 'password' } }
     assert is_logged_in?
-    assert_redirected_to @user
-    follow_redirect!
+    assert_redirected_to @user # リダイレクト先が正しいかどうかをチェック
+    follow_redirect! # そのページに実際に移動する
     assert_template 'users/show'
     assert_select "a[href=?]", login_path, count: 0
     assert_select "a[href=?]", logout_path

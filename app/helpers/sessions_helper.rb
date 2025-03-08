@@ -1,4 +1,10 @@
 module SessionsHelper
+  # module SessionsHelper ... endを定義し、
+  # すべてのコントローラーの親であるapplication_controllerでincludeすることにより、
+  # すべてのコントローラーで以下のメソッドが使えるようになる。
+
+
+
   #渡されたユーザでログインする
   def log_in(user)
     session[:user_id] = user.id
