@@ -9,6 +9,9 @@ module SessionsHelper
   def log_in(user)
     session[:user_id] = user.id
     # session情報はブラウザに保存される
+
+    # セッションリプレイ攻撃から保護する
+    session[:session_token] = user.session_token
   end
 
   # 永続的セッションのためにユーザーをデータベースに記憶する
@@ -22,24 +25,24 @@ module SessionsHelper
 
   # 記憶トークンcookieに対応するユーザーを返す
   def current_user
-    if (user_id = session[:user_id]) # (ユーザーIDにユーザーIDのセッションを代入した結果)ユーザーIDのセッションが存在すれば
-      @current_user ||= User.find_by(id: user_id)
+    if (user_id = session[:user_id])
+      user = User.find_by(id: user_id)
+      if user && session[:session_token] == user.session_token
+        @current_user = user
+      end
     elsif (user_id = cookies.encrypted[:user_id])
       user = User.find_by(id: user_id)
-      if user&.authenticated?(cookies[:remember_token])
+      if user && user.authenticated?(cookies[:remember_token])
         log_in user
         @current_user = user
       end
     end
   end
 
-  # 現在ログイン中のユーザを返す（いる場合）
-  # def current_user
-  #   if session[:user_id] # session情報はTRUEであれば　=>この構文はメモ化
-  #       @current_user ||= User.find_by(id: session[:user_id]) # @current_userへ情報を代入する
-  #   end
-  # DBへの問い合わせをなるべく少なく実行したい。
-  # end
+  # 渡されたユーザーがカレントユーザーであればtrueを返す
+  def current_user?(user)
+    user && user == current_user
+  end
 
   # ユーザがログインしていればTrue、その他ならfalseを返す
   def logged_in?
@@ -58,5 +61,11 @@ module SessionsHelper
     forget(current_user)
     reset_session
     @current_user = nil
+  end
+
+  # ログイン前にアクセスしようとして入れなかったそのページのURLを保存する
+  # ログインを終えるとアクセスしようとしたページにリダイレクトしてくれる。
+  def store_location
+    session[:forwarding_url] = request.original_url if request.get?
   end
 end

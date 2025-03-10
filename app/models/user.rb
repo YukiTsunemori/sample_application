@@ -14,7 +14,7 @@ class User < ApplicationRecord # rubocop:disable Style/Documentation
   has_secure_password
   validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
 
-  def self.digest(string)
+  def User.digest(string)
     # fixtures/users.ymlでUser.digestメソッドを呼び出せるよう、ここで定義
     # 引数に渡された文字列をハッシュ化するメソッド。
     cost = if ActiveModel::SecurePassword.min_cost
@@ -27,7 +27,7 @@ class User < ApplicationRecord # rubocop:disable Style/Documentation
   end
 
   # ランダムなトークンを返す
-  def self.new_token
+  def User.new_token
     SecureRandom.urlsafe_base64
   end
 
@@ -36,6 +36,13 @@ class User < ApplicationRecord # rubocop:disable Style/Documentation
     self.remember_token = User.new_token
     # ランダムなトークンをDBへupdate_attributeメソッドを使って保存する
     update_attribute(:remember_digest, User.digest(remember_token))
+    remember_digest
+  end
+
+  # セッションハイジャック防止のためにセッショントークンを返す
+  # この記憶ダイジェストを再利用しているのは単に利便性のため
+  def session_token
+    remember_digest || remember
   end
 
   # 渡されたremember_tokenがダイジェストと一致したらtrueを返す

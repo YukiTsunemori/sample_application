@@ -6,7 +6,8 @@ class SessionsController < ApplicationController
   def create
     # remember_meの値が１であればtrue, 0であればfalse
     user = User.find_by(email: params[:session][:email].downcase)
-    if user&.authenticate(params[:session][:password])
+    if user && user.authenticate(params[:session][:password])
+      forwarding_url = session[:forwarding_url]
       # (nilガード）
       # find_byメソッドはオブジェクトが見つからなかった時、nilを返す（例外発生）
       # user.authenticateはnilを受け取らないので、エラーになる。そのため、アンパサンド*2で
@@ -15,7 +16,7 @@ class SessionsController < ApplicationController
       params[:session][:remember_me] == '1' ? remember(user) : forget(user)
       remember user
       log_in user
-      redirect_to user_url(user)
+      redirect_to forwarding_url || user
       # ユーザが存在し且つパスが一致した場合=> Trueが帰った時
     else
       # alert-danger => 赤色のフラッシュ
