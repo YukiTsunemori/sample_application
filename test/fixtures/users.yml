@@ -2,10 +2,12 @@ michael:
   name: Michael Example
   email: michael@example.com
   password_digest: <%= User.digest('password') %> 
+  admin: true
   # User.digestメソッドはusers.rbで定義されたメソッドを呼び出している。
   # 呼び出すとき、('password')という引数を渡してあげると、そのメソッド内で
   # bcryptライブラリを使用し、ハッシュ化してくれる。それが、ここへ返ってくる。
   # User.digestはクラスメソッド。=> 直接ハッシュ化できた。
+  
 
 archer:
   name: Sterling Archer
