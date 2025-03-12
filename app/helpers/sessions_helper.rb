@@ -39,9 +39,11 @@ module SessionsHelper
     end
   end
 
-  # 渡されたユーザーがカレントユーザーであればtrueを返す
+  # 渡されたユーザーが存在していて、かつそのユーザーが現在ログインしているユーザーである場合 => True
   def current_user?(user)
     user && user == current_user
+    # binding.irb
+    # user => id:1, name:Tsunemori, email:yuki.tsunemori1229@gmail.com....
   end
 
   # ユーザがログインしていればTrue、その他ならfalseを返す
@@ -63,9 +65,11 @@ module SessionsHelper
     @current_user = nil
   end
 
-  # ログイン前にアクセスしようとして入れなかったそのページのURLを保存する
-  # ログインを終えるとアクセスしようとしたページにリダイレクトしてくれる。
   def store_location
+    # ログイン前にアクセスしようとして入れなかったそのページのURLを保存する
+    # ログインを終えるとアクセスしようとしたページにリダイレクトしてくれる。
     session[:forwarding_url] = request.original_url if request.get?
+    # request.original_urlはユーザーが今いるページのウェブアドレス（URL）を取り出す命令
+    # if request.get?は「そのページにGETリクエストが送られた場合だけ」という条件設定
   end
 end

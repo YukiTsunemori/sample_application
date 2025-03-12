@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 class UsersController < ApplicationController 
-  # edit, updateアクションを呼び出す寸前で、logged_in_userメソッドを呼び出す。
-  # :onlyオブションで指定したアクションだけで適用される。今回の場合は、editとupdate
-  before_action :logged_in_user,  only: [:edit, :update]
-  before_action :correct_user,   only: [:edit, :update]
-
+  # 指定したアクションを呼び出す寸前で、logged_in_userメソッドを呼び出す。
+  # :onlyオブションで指定したアクションだけで適用される。
+  before_action :logged_in_user,  only: [:index, :edit, :update, :destroy]
+  before_action :correct_user,    only: [:edit, :update]
+  before_action :admin_user,      only: :destory
 
   def show
     @user = User.find(params[:id])
@@ -30,9 +30,9 @@ class UsersController < ApplicationController
   end
 
   def destory
-    # sessions_helperで定義している、log_outメソッドを呼び出す
-    log_out
-    redirect_to root_url, status: :see_other
+    User.find(params[:id]).destory
+    flash[:success] = "User Deleted"
+    redirect_to users_url, status: :see_other
   end
 
   def edit
@@ -50,10 +50,15 @@ class UsersController < ApplicationController
     else
       render 'edit', status: :unprocessable_entity
     end
-
     # @user変数に代入しなくても、beforeメソッドで本人かどうかのチェックを終えているので、
     # ここでは再代入しない。
     # @user = User.find(params[:id])
+    
+  end
+
+  def index
+    # params[:page]はwill_paginateによって自動で生成される
+    @users = User.paginate(page: params[:page])
   end
 
   private
@@ -67,7 +72,7 @@ class UsersController < ApplicationController
 
     # 　ログイン済みユーザーかどうか確認
     def logged_in_user
-      unless logged_in?
+      unless logged_in? # もしログインしてなかったら
         store_location
         flash[:danger] = "Please log in."
         redirect_to login_url, status: :see_other
@@ -78,5 +83,12 @@ class UsersController < ApplicationController
     def correct_user
       @user = User.find(params[:id])
       redirect_to(root_url, status: :see_other) unless current_user?(@user)
+      # このメソッド全体では、「もし今のユーザーと違うユーザーのページを見ようとしたら、ホームに戻す」
+      # unless @user == current_user => unless current_user?(@user)
+    end
+
+    # 管理者かどうか確認
+    def admin_user
+      redirect_to(root_url, status: :see_other) unless current_user.admin?
     end
 end

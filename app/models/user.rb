@@ -44,6 +44,7 @@ class User < ApplicationRecord # rubocop:disable Style/Documentation
   def session_token
     remember_digest || remember
   end
+  #  binding.irb
 
   # 渡されたremember_tokenがダイジェストと一致したらtrueを返す
   def authenticated?(remember_token)
