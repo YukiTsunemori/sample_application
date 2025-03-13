@@ -7,21 +7,25 @@ class SessionsController < ApplicationController
     # remember_meの値が１であればtrue, 0であればfalse
     user = User.find_by(email: params[:session][:email].downcase)
     if user && user.authenticate(params[:session][:password])
-      forwarding_url = session[:forwarding_url]
-      # (nilガード）
-      # find_byメソッドはオブジェクトが見つからなかった時、nilを返す（例外発生）
-      # user.authenticateはnilを受け取らないので、エラーになる。そのため、アンパサンド*2で
-      # true && trueの式を代わりに書いてあげる。
-      reset_session
-      params[:session][:remember_me] == '1' ? remember(user) : forget(user)
-      remember user
-      log_in user
-      redirect_to forwarding_url || user
-      # ユーザが存在し且つパスが一致した場合=> Trueが帰った時
+      if user.activated?
+        forwarding_url = session[:forwarding_url]
+        # (nilガード）
+        # find_byメソッドはオブジェクトが見つからなかった時、nilを返す（例外発生）
+        # user.authenticateはnilを受け取らないので、エラーになる。そのため、アンパサンド*2で
+        # true && trueの式を代わりに書いてあげる。
+        reset_session
+        params[:session][:remember_me] == '1' ? remember(user) : forget(user)
+        log_in user
+        redirect_to forwarding_url || user
+        # ユーザが存在し且つパスが一致した場合=> Trueが帰った時
+      else
+        message  = "Account not activated. "
+        message += "Check your email for the activation link."
+        flash[:warning] = message
+        redirect_to root_url
+      end
     else
-      # alert-danger => 赤色のフラッシュ
-      flash.now[:danger] = 'Iinvalid email/password combination'
-      # flash変数
+      flash.now[:danger] = 'Invalid email/password combination'
       render 'new', status: :unprocessable_entity
     end
   end
