@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
+  has_many :microposts, dependent: :destroy #ユーザーが削除された時、投稿も一緒に破棄されるべき
+  # ユーザーは複数のポストをもつ => 一対多の構造
   # getterとsetterメソッドを使えるようにする
   attr_accessor :remember_token, :activation_token, :reset_token
   before_save   :downcase_email
@@ -92,6 +94,12 @@ class User < ApplicationRecord
   # パスワード再設定の期限が切れている場合は、trueを返す
   def password_reset_expired?
     reset_sent_at < 2.hours.ago
+  end
+
+  def feed
+    # 試作feedの定義
+    # 完全な実装は次章のユーザーをフォローするを参照
+    Micropost.where("user_id = ?", id)
   end
 
 

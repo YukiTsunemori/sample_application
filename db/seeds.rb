@@ -24,3 +24,9 @@ User.create!(name:  "Yuki Tsunemori",
             # create!としているのは、ユーザーが無効な場合にfalseを返すのではなく、例外を
             # 発生させることができる。そうすることで、見過ごしやすいエラーを回避できる。
 end
+# ユーザーの一部を対象にマイクロポストを生成する
+users = User.order(:created_at).take(6)
+50.times do
+  content = Faker::Lorem.sentence(word_count: 5)
+  users.each { |user| user.microposts.create!(content: content) }
+end

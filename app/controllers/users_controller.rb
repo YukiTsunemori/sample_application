@@ -9,6 +9,7 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
+    @microposts = @user.microposts.paginate(page: params[:page])
     # debugger
     # binding.irb
   end
@@ -65,17 +66,6 @@ class UsersController < ApplicationController
     def user_params
       params.require(:user).permit(:name, :email, :password,
                                   :password_confirmation)
-    end
-
-    # beforeフィルタ
-
-    # 　ログイン済みユーザーかどうか確認
-    def logged_in_user
-      unless logged_in? # もしログインしてなかったら
-        store_location
-        flash[:danger] = "Please log in."
-        redirect_to login_url, status: :see_other
-      end
     end
 
     # 正しいユーザーかどうか確認
