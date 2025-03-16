@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class UsersController < ApplicationController 
+class UsersController < ApplicationController  # rubocop:disable Style/Documentation
   # 指定したアクションを呼び出す寸前で、logged_in_userメソッドを呼び出す。
   # :onlyオブションで指定したアクションだけで適用される。
   before_action :logged_in_user,  only: [:index, :edit, :update, :destroy]

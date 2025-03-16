@@ -26,8 +26,8 @@ class MicropostsInterfaceTest < ActionDispatch::IntegrationTest
       # assert_select 'a[href=?]', '/?page=2'  # 正しいページネーションリンク
     end
 
-    test "should create a micropost on valid submission" do
-      content = "This micropost really ties the room together"
+    test 'should create a micropost on valid submission' do
+      content = 'TPhis micropost really ties the room together'
       assert_difference 'Micropost.count', 1 do
         post microposts_path, params: { micropost: { content: content } }
       end
