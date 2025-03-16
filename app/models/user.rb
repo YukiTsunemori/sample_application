@@ -1,10 +1,12 @@
-# frozen_string_literal: true
-
-class User < ApplicationRecord
+class User < ApplicationRecord 
   has_many :microposts, dependent: :destroy #ユーザーが削除された時、投稿も一緒に破棄されるべき
+  has_many :active_relationships,  class_name:  "Relationship",
+                                   foreign_key: "follower_id",
+                                   dependent: :destroy
   # ユーザーは複数のポストをもつ => 一対多の構造
   # getterとsetterメソッドを使えるようにする
   attr_accessor :remember_token, :activation_token, :reset_token
+
   before_save   :downcase_email
   before_create :create_activation_digest
   validates :name, presence: true, length: { maximum: 50 }
