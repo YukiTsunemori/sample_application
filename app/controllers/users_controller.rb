@@ -3,7 +3,7 @@
 class UsersController < ApplicationController  # rubocop:disable Style/Documentation
   # 指定したアクションを呼び出す寸前で、logged_in_userメソッドを呼び出す。
   # :onlyオブションで指定したアクションだけで適用される。
-  before_action :logged_in_user,  only: [:index, :edit, :update, :destroy]
+  before_action :logged_in_user,  only: [:index, :edit, :update, :destroy, :following, :followers]
   before_action :correct_user,    only: [:edit, :update]
   before_action :admin_user,      only: :destroy
 
@@ -59,6 +59,20 @@ class UsersController < ApplicationController  # rubocop:disable Style/Documenta
   def index
     # params[:page]はwill_paginateによって自動で生成される
     @users = User.paginate(page: params[:page])
+  end
+
+  def following
+    @title = "Following"
+    @user  = User.find(params[:id])
+    @users = @user.following.paginate(page: params[:page])
+    render 'show_follow'
+  end
+
+  def followers
+    @title = "Followers"
+    @user  = User.find(params[:id])
+    @users = @user.followers.paginate(page: params[:page])
+    render 'show_follow'
   end
 
   private
