@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class UsersController < ApplicationController  # rubocop:disable Style/Documentation
+class UsersController < ApplicationController 
   # 指定したアクションを呼び出す寸前で、logged_in_userメソッドを呼び出す。
   # :onlyオブションで指定したアクションだけで適用される。
   before_action :logged_in_user,  only: [:index, :edit, :update, :destroy, :following, :followers]
@@ -41,9 +41,11 @@ class UsersController < ApplicationController  # rubocop:disable Style/Documenta
     # @user = User.find(params[:id])
   end
 
+  # POST(PATCH) /editのform_withからparamsで取得した値をアップデート
   def update
     # privateメソッドないで定義したuser_paramsの戻り値をここでも利用する。
     # => マスアサインメントの脆弱性を防止する。
+    # binding.irb
     if @user.update(user_params)
       flash[:success] = "Updated Profile"
       redirect_to @user
@@ -80,7 +82,9 @@ class UsersController < ApplicationController  # rubocop:disable Style/Documenta
     def user_params
       params.require(:user).permit(:name, :email, :password,
                                   :password_confirmation)
+    # binding.irb
     end
+    
 
     # 正しいユーザーかどうか確認
     def correct_user

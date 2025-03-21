@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module SessionsHelper
   # module SessionsHelper ... endを定義し、
   # すべてのコントローラーの親であるapplication_controllerでincludeすることにより、
@@ -49,6 +47,8 @@ module SessionsHelper
   # ユーザがログインしていればTrue、その他ならfalseを返す
   def logged_in?
     !current_user.nil?
+    # current_user.nil?がtrueの場合、ログインしていない。！でfalseとなる
+    # current_user.nil?がfalseの場合、ログインしている。!でtrueとなる
   end
 
   # 永続的セッションを破棄する

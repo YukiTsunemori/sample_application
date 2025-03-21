@@ -21,6 +21,10 @@ class User < ApplicationRecord
                        uniqueness: { case_sensitive: true }
 
   has_secure_password
+  # has_secure_passwordメソッドを定義すると自動的にいくつかの検証（validation）が追加される。
+  # 1. パスワードに値があるかどうかのチェック
+  # 2. パスワードの長さ(最低でも6文字以上)
+  # 3. パスワード再確認(入力されたものと一致しているか)
   validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
 
   def User.digest(string)
