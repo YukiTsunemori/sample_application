@@ -15,7 +15,7 @@ class SessionsController < ApplicationController
         # true && trueの式を代わりに書いてあげる。
         reset_session
         params[:session][:remember_me] == '1' ? remember(user) : forget(user)
-        log_in user
+        log_in user #ApplicationControllerでincludeされたsessions_helperのlog_inメソッドを呼び出す。
         redirect_to forwarding_url || user
         # ユーザが存在し且つパスが一致した場合=> Trueが帰った時
       else

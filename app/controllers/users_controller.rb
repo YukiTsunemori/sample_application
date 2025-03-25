@@ -61,6 +61,8 @@ class UsersController < ApplicationController
   def index
     # params[:page]はwill_paginateによって自動で生成される
     @users = User.paginate(page: params[:page])
+    # irb :001> params[:page]
+    # => "2"  クリックしたページ番号がparams引数として渡される
   end
 
   def following
