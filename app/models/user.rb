@@ -47,6 +47,7 @@ class User < ApplicationRecord
   # 永続的セッションのためにユーザーをDBに記憶する
   def remember
     self.remember_token = User.new_token
+    # binding.irb
     # ランダムなトークンをDBへupdate_attributeメソッドを使って保存する
     update_attribute(:remember_digest, User.digest(remember_token))
     remember_digest
@@ -137,9 +138,7 @@ class User < ApplicationRecord
   private
     # メールアドレスを全て小文字にする
     # あとでコールバック関数として呼び出される
-    def downcase_email
-      self.email = email.downcase
-    end
+   
 
     # 有効かトークンとダイジェストを作成および代入する
     def create_activation_digest

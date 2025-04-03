@@ -3,5 +3,7 @@
 <%= will_paginate %>
 <ul class="users">
     <%= render @users %>
+    <%#  @users変数をRailsはユーザーオブジェクトのリストとして認識する。さらに、renderメソッドに渡すことで、それを一覧させるuserパーシャルを自動で探すようになる %>
+    <%#  よって render @usersと書くことでシンプルなロジックが完成する。 %>
 </ul>
 <%= will_paginate %>

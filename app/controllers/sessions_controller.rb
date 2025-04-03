@@ -34,7 +34,7 @@ class SessionsController < ApplicationController
   # そのため、取り出す際はparams[:session][:email]でパラメータから取得できる。
 
   def destroy
-    log_out if logged_in? # helperで定義したログアウトメソッドの呼び出し
+    log_out if logged_in? # helperで定義したログアウトメソッドの呼び出し。if文を書くことで、連続ログアウト問題が解決する。nilクラスが返らない。
     redirect_to root_url, status: :see_other
   end
 end

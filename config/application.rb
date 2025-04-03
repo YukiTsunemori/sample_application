@@ -14,12 +14,7 @@ module SampleApp
     config.load_defaults 7.0
     config.time_zone = 'Tokyo'
     config.active_storage.variant_processor = :mini_magick
-    # Configuration for the application, engines, and railties goes here.
-    #
-    # These settings can be overridden in specific environments using the files
-    # in config/environments, which are processed later.
-    #
-    # config.time_zone = "Central Time (US & Canada)"
-    # config.eager_load_paths << Rails.root.join("extras")
+    config.assets.paths << Rails.root.join("vendor", "assets", "stylesheets")
+
   end
 end
